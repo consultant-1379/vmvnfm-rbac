@@ -1,0 +1,49 @@
+#
+# COPYRIGHT Ericsson 2020
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+global:
+  registry:
+    url: armdocker.rnd.ericsson.se
+    imagePullPolicy: IfNotPresent
+  hosts:
+    iam:
+  iam:
+    clientId: eo
+    adminSecret: eric-sec-access-mgmt-creds
+    userKey: kcadminid
+    passwordKey: kcpasswd
+    cacert:
+      secretName: iam-cacert-secret
+      key: tls.crt
+      filePath: iam/ca.crt
+resources:
+  keycloakClient:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+      ephemeral-storage: "200Mi"
+    limits:
+      memory: "256Mi"
+      cpu: "100m"
+      ephemeral-storage: "300Mi"
+imageCredentials:
+  keycloak-client:
+    registry:
+      url:
+      imagePullPolicy: IfNotPresent
+    repoPath: "proj-orchestration-so"
+
+userSecret: vnfm-user-credentials

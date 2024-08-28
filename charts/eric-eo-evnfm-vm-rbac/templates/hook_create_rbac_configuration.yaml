@@ -1,0 +1,110 @@
+#
+# COPYRIGHT Ericsson 2020
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "eric-eo-evnfm-vm-rbac.name" . }}-create-configuration-hook
+  labels:
+    {{- include "eric-eo-evnfm-vm-rbac.kubernetes-io-info" .| nindent 4 }}
+  annotations:
+    {{- include "eric-eo-evnfm-vm-rbac.helm-annotations" .| nindent 4 }}
+    "helm.sh/hook": post-install, post-upgrade, post-rollback
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      serviceAccountName: {{ template "eric-eo-evnfm-vm-rbac.name" . }}-sa
+      {{- if include "eric-eo-evnfm-vm-rbac.keycloak-client.pullSecrets" . }}
+      imagePullSecrets:
+        - name: {{ template "eric-eo-evnfm-vm-rbac.keycloak-client.pullSecrets" . }}
+      {{- end }}
+      restartPolicy: OnFailure
+      containers:
+        - name: keycloak-client
+          image: {{ template "vnfm-rbac.mainImagePath" . }}
+          imagePullPolicy: {{ template "eric-eo-evnfm-vm.imagePullPolicy" . }}
+          env:
+          - name: IAM_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.global.iam.adminSecret | quote }}
+                key: {{ .Values.global.iam.userKey | quote }}
+          - name: IAM_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.global.iam.adminSecret | quote }}
+                key: {{ .Values.global.iam.passwordKey | quote }}
+          args:
+          - "create"
+          - "authz"
+          - "--keycloak_hostname={{ .Values.global.hosts.iam }}"
+          - "--keycloak_user=$(IAM_ADMIN_USER)"
+          - "--keycloak_password=$(IAM_ADMIN_PASSWORD)"
+          - "--client_name={{ .Values.global.iam.clientId }}"
+          - "--config=/config/vmvnfm-rbac-configuration.json"
+          - "--provider={{ .Chart.Name }}"
+          resources:
+            requests:
+            {{- if .Values.resources.keycloakClient.requests.cpu }}
+              cpu: {{ .Values.resources.keycloakClient.requests.cpu | quote }}
+            {{- end }}
+            {{- if .Values.resources.keycloakClient.requests.memory }}
+              memory: {{ .Values.resources.keycloakClient.requests.memory | quote }}
+            {{- end }}
+            {{- if index .Values.resources.keycloakClient.requests "ephemeral-storage" }}
+              ephemeral-storage: {{ index .Values.resources.keycloakClient.requests "ephemeral-storage" | quote }}
+            {{- end }}
+            limits:
+            {{- if .Values.resources.keycloakClient.limits.cpu }}
+              cpu: {{ .Values.resources.keycloakClient.limits.cpu | quote }}
+            {{- end }}
+            {{- if .Values.resources.keycloakClient.limits.memory }}
+              memory: {{ .Values.resources.keycloakClient.limits.memory | quote }}
+            {{- end }}
+            {{- if index .Values.resources.keycloakClient.limits "ephemeral-storage" }}
+              ephemeral-storage: {{ index .Values.resources.keycloakClient.limits "ephemeral-storage" | quote }}
+            {{- end }}
+          volumeMounts:
+          - name: eric-eo-evnfm-vm-rbac-configmap
+            mountPath: /config
+          - name: create-cacert-volume
+            mountPath: /mnt/certs
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            runAsNonRoot: true
+            runAsUser: 128474
+      {{- if .Values.nodeSelector}}
+      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8}}
+      {{- else if .Values.global.nodeSelector}}
+      nodeSelector: {{ toYaml .Values.global.nodeSelector | nindent 8}}
+      {{- end}}
+      volumes:
+      - name: eric-eo-evnfm-vm-rbac-configmap
+        configMap:
+          name: {{ template "eric-eo-evnfm-vm-rbac.name" . }}-configmap
+          defaultMode: 0777
+      - name: create-cacert-volume
+        secret:
+          secretName: {{ .Values.global.iam.cacert.secretName }}
+          items:
+            - key: {{ .Values.global.iam.cacert.key }}
+              path: {{ .Values.global.iam.cacert.filePath }}

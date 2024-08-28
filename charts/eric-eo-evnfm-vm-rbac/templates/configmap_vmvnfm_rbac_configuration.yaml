@@ -1,0 +1,661 @@
+#
+# COPYRIGHT Ericsson 2020
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "eric-eo-evnfm-vm-rbac.name" . }}-configmap
+  labels:
+    {{- include "eric-eo-evnfm-vm-rbac.kubernetes-io-info" .| nindent 4 }}
+  annotations:
+    {{- include "eric-eo-evnfm-vm-rbac.helm-annotations" .| nindent 4 }}
+data:
+  vmvnfm-rbac-configuration.json: |
+    {
+      "authorization": {
+        "resources": [
+          {
+            "name": "VM VNFM WFS Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/wfs/**",
+              "/lcmwfs/**"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*",
+              "/vevnfmem/vnflcm/v1/vnf_instances"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Resource Information Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/resources",
+              "/vevnfmem/vnflcm/v1/resources/*",
+              "/vevnfmem/vnflcm/v1/resources/*/pods",
+              "/vevnfmem/vnflcm/v1/resources/*/vnfcScaleInfo"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Resource Upgrade Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/change_vnfpkg"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Resource Instantiation Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/instantiate"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Resource Termination Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/terminate",
+              "/vevnfmem/vnflcm/v1/resources/*/cleanup"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Operation History Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/operations",
+              "/vevnfmem/vnflcm/api/v1/instance/filter/autocomplete",
+              "/vevnfmem/vnflcm/v1/vnf_lcm_op_occs",
+              "/vevnfmem/vnflcm/v1/vnf_lcm_op_occs/*"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM ENM Node Integration Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/addNode"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM ENM Node Deletion Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/deleteNode"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Manual Scale Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/scale"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Manual Heal Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/heal"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Manual Operate Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_instances/*/operate"
+            ],
+            "scopes": [
+              {
+                "name": "PATCH"
+              },
+              {
+                "name": "DELETE"
+              },
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              },
+              {
+                "name": "PUT"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM Onboarded VNF Packages Information Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vnflcm/v1/vnf_packages"
+            ],
+            "scopes": [
+              {
+                "name": "GET"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM VEVNFEM VCD Package Onboard Resource",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vevnfmem/vcd/pkgOnboard"
+            ],
+            "scopes": [
+              {
+                "name": "POST"
+              }
+            ]
+          },
+          {
+            "name": "VM VNFM ADMIN OPERATIONS RESOURCE",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/vnflcm-admin/**"
+            ],
+            "scopes": [
+              {
+                "name": "GET"
+              },
+              {
+                "name": "POST"
+              }
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "Is VM VNFM WFS Policy",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"VM VNFM WFS\",\"required\":false}]"
+            }
+          },
+          {
+            "name": "Is VM VNFM VIEW WFS Policy",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"VM VNFM VIEW WFS\",\"required\":false}]"
+            }
+          },
+          {
+            "name": "Is VM VNFM ADMIN OPERATOR Policy",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "roles": "[{\"id\":\"VM VNFM ADMIN\",\"required\":false}]"
+            }
+          },
+           {
+            "name": "VM VNFM WFS Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM WFS Resource\"]",
+              "scopes": "[\"POST\",\"DELETE\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+           {
+            "name": "VM VNFM VIEW WFS Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM WFS Resource\"]",
+              "scopes": "[\"GET\"]",
+              "applyPolicies": "[\"Is VM VNFM VIEW WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM View Resource Permission 1",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource\"]",
+              "scopes": "[\"GET\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\",\"Is VM VNFM VIEW WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM View Resource Permission 2",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource\"]",
+              "scopes": "[\"GET\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\",\"Is VM VNFM VIEW WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM View Resource Permission 3",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Operation History Resource\"]",
+              "scopes": "[\"GET\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\",\"Is VM VNFM VIEW WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM View Resource Permission 4",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource Information Resource\"]",
+              "scopes": "[\"GET\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\",\"Is VM VNFM VIEW WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Instantiate Resource Permission 1",
+            "name": "VM VNFM VEVNFEM Resource PATCH Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Operation History Resource\"]",
+              "scopes": "[\"PATCH\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Instantiate Resource Permission 1",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Instantiate Resource Permission 2",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource Instantiation Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Terminate Resource DELETE Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource\"]",
+              "scopes": "[\"DELETE\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Terminate Resource POST Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource Termination Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Upgrade Resource Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource Upgrade Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM ENM Node Integration Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM ENM Node Integration Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM ENM Node Deletion Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM ENM Node Deletion Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Manual Scale Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Manual Scale Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Manual Heal Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Manual Heal Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM Modify Resource PATCH Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Resource\"]",
+              "scopes": "[\"PATCH\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM Manual Operate Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Manual Operate Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM View Packages Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM Onboarded VNF Packages Information Resource\"]",
+              "scopes": "[\"GET\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\",\"Is VM VNFM VIEW WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM VEVNFEM VCD Package Onboard Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM VEVNFEM VCD Package Onboard Resource\"]",
+              "scopes": "[\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM WFS Policy\"]"
+            }
+          },
+          {
+            "name": "VM VNFM Admin Operations Permission",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "resources": "[\"VM VNFM ADMIN OPERATIONS RESOURCE\"]",
+              "scopes": "[\"GET\",\"POST\"]",
+              "applyPolicies": "[\"Is VM VNFM ADMIN OPERATOR Policy\"]"
+            }
+          }
+        ],
+        "scopes": [
+          {
+            "name": "GET"
+          },
+          {
+            "name": "POST"
+          },
+          {
+            "name": "DELETE"
+          },
+          {
+            "name": "PUT"
+          },
+          {
+            "name": "PATCH"
+          }
+        ]
+      }
+    }
